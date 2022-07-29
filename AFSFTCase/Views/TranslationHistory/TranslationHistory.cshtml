@@ -1,0 +1,94 @@
+﻿
+
+@model List<AFSFTCase.Models.DataModelEntity>
+
+
+@{
+    ViewData["Title"] = "TranslationHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Translation History</h1>
+
+@*<form method="get" asp-controller="TranslationHistory" asp-action="Filter" class="border border-light p-1 form-control" >
+    <p class="m-1">Filter</p>
+    <input type="text" name="input" placeholder="Search by text" class="h-100"/>
+     <select name="trnsltr" id="select-translator" class="form-select form-control bg-light d-inline-block m-2 w-25" >
+
+              <option value="" selected class="text-light">Optional</option>
+              <option value="leetspeak">Leetspeak</option>
+              <option value="yoda">Yoda</option>
+              <option value="ermahgerd">Ermahgerd</option>
+              <option value="irish">Irish</option>
+            </select>
+            <br />
+            <label>Start date: </label> <input name="tTMax" type="datetime-local">
+            
+            <label>End Date:</label> <input name= "tTMin" type="datetime-local">
+            <br />
+            <button type="submit" class=" form-control btn btn-primary m-2 w-25">Filter</button>
+
+</form>*@ @*//this form is commented out because Action method for this is useless. 
+*@
+
+<form asp-action="SortFilter" class="border border-light " method="get">
+    <div class=" form-actions container-lg m-auto">
+        <p>
+            Search: <input type="text" name="searchString" placeholder="Type input" value="@ViewData["CurrentFilter"]" />       
+            <label>From </label> <input name= "start" type="datetime-local" asp-route-start="@ViewData["DateFilterStart"]"> 
+            <label>To</label> <input name="end" type="datetime-local" asp-route-end="@ViewData["DateFilterEnd"]">
+            
+
+            <select name="translator" id="select-translator" asp-route-translator="@ViewData["Translator"]" class="form-select form-control bg-light d-inline-block m-2 w-25" >
+
+              <option value="" selected class="text-light">Optional</option>
+              <option value="leetspeak">Leetspeak</option>
+              <option value="yoda">Yoda</option>
+              <option value="irish">Irish</option>
+            </select>
+            <button asp-action="SortFilter" class="btn btn-info">Search</button>
+
+            <a asp-action="SortFilter">Clear filters</a>
+        </p>
+    </div>
+
+
+
+</form>
+<table class="table table-hover border border-light p-1 mt-3 ">
+
+    <thead>
+        <tr> 
+            <th>  
+                <a asp-action="SortFilter" asp-route-sortOrder="@ViewData["InputSortParm"]">Input</a>    
+            </th>
+            <th>  Translation  </th>
+            <th>  
+                <a asp-action="SortFilter" asp-route-sortOrder="@ViewData["TranslatorSortParm"]">Translator</a> 
+                
+            </th>
+            <th>  
+                <a asp-action="SortFilter" asp-route-sortOrder="@ViewData["DateSortParm"]">Date</a>    
+            </th>
+        </tr>
+    </thead>
+
+    <tbody  >
+
+        @foreach(var item in Model)
+        {
+            <tr  >
+                <th>@Html.DisplayFor(m=> item.InputString)</th>
+                <th>@Html.DisplayFor(m=> item.TranslatedString)</th>
+                <th>@Html.DisplayFor(m=> item.Translator)</th>
+                <th>@Html.DisplayFor(m=> item.TranslationTime)</th>
+                
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+
+

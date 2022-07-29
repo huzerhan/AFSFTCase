@@ -1,0 +1,10 @@
+﻿@model DataModelEntity
+@{
+    ViewData["Title"] = "GetInput";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Translation Result</h1>
+@Html.LabelFor(m=> m.TranslatedString)
+@Html.DisplayFor(m=> m.TranslatedString)
+

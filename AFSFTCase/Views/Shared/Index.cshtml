@@ -1,0 +1,44 @@
+﻿@model DataModelEntity
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-center">
+    <h1 class="display-4"> Welcome to the Translator WebApp</h1>
+    <p>Built by Erhan Huz as an application project for Advanced Field Solutions</p>
+    <span></span>
+    <p>To translate, enter a text below.</p>
+</div>
+
+<div>
+
+        <form method= "get" asp-controller="Translator" asp-action="GetInput" >
+            <label  class="d-inline m-2"> Choose a translator: </label> 
+
+            <select name="translator" id="select-translator"  class="form-select form-control d-inline-block m-2 h-100 w-25" aria-label="Default select example">
+                  <option value="leetspeak" selected>Leetspeak</option>
+                  <option value="yoda">Yoda</option>
+                  <option value="irish">Irish</option>
+            </select> 
+             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="InputString" class="form-control" />
+                <span asp-validation-for="InputString" class="text-danger"></span>
+            </div>
+            
+           @*<input  id="input-text" name="InputString" class="form-control"></input>*@
+          @* <span  asp-validation-for="InputString" class="text-danger"></span>*@
+           <br />
+           <button  type="submit" class="btn btn-primary form-control w-25"> Translate!</button>
+        </form>
+</div>
+<div class="mt-3">
+    <label class="">Translation result: <strong style="font-size:150%;">@Html.DisplayFor(m=> m.TranslatedString)</strong> </label>
+    
+
+</div>
+        
+
+
+
