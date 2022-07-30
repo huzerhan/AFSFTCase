@@ -35,8 +35,8 @@
     <div class=" form-actions container-lg m-auto">
         <p>
             Search: <input type="text" name="searchString" placeholder="Type input" value="@ViewData["CurrentFilter"]" />       
-            <label>From </label> <input name= "start" type="datetime-local" asp-route-start="@ViewData["DateFilterStart"]"> 
-            <label>To</label> <input name="end" type="datetime-local" asp-route-end="@ViewData["DateFilterEnd"]">
+            <label>From </label> <input name= "start" disabled type="datetime-local" asp-route-start="@ViewData["DateFilterStart"]"> 
+            <label>To</label> <input name="end" disabled type="datetime-local" asp-route-end="@ViewData["DateFilterEnd"]">
             
 
             <select name="translator" id="select-translator" asp-route-translator="@ViewData["Translator"]" class="form-select form-control bg-light d-inline-block m-2 w-25" >

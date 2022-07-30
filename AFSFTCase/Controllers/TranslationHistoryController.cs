@@ -24,21 +24,21 @@ namespace AFSFTCase.Controllers
         }
 
 
-        public async Task<IActionResult> SortFilter(string sortOrder, string searchString, string translator, DateTime? start, DateTime? end)
+        public async Task<IActionResult> SortFilter(string? sortOrder,string dateSort, string searchString, string translator/*, DateTime? start, DateTime? end*/)
         {
             #region sorting
-            
-            ViewData["InputSortParm"] = String.IsNullOrEmpty(sortOrder) ? "input_desc" : "input_asc";
-            ViewData["TranslatorSortParm"] = String.IsNullOrEmpty(sortOrder) ? "trans_desc" : "trans_asc";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "" : "date_desc";
 
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            //ViewData["DateSortParm"] = String.IsNullOrEmpty(dateSort)? "" : "date_desc";
+            
             #endregion sorting
 
             #region filtering
 
             ViewData["CurrentFilter"] = searchString;
-            ViewData["DateFilterStart"] = start;
-            ViewData["DateFilterEnd"] = end;
+            //ViewData["DateFilterStart"] = start; // I couldn't make filter based on date work. So I commented it out
+            //ViewData["DateFilterEnd"] = end;
             ViewData["Translator"] = translator;
 
             #endregion filtering
@@ -48,31 +48,32 @@ namespace AFSFTCase.Controllers
                                                   select s;
 
             // this part turns date parametres to double and compares them to each other
-            if (end.HasValue)
+            #region commented out
+            //I couldn't make filter based on date work. So I commented it out
+            //if (end.HasValue)
+            //{
+            //    end.
+            //    entries = entries.Where(s => s.TranslationTime.CompareTo(end)>0);
+            //}
+            //if (start.HasValue)
+            //{
+            //    entries = entries.Where(s => s.TranslationTime.CompareTo(end) < 0);
+            //}
+            #endregion commented out
+
+            switch (sortOrder)
             {
-                double endD = end.GetValueOrDefault().ToOADate();
-                entries = entries.Where(s => Convert.ToDouble(s.TranslationTime) < endD);
-            }
-            if (start.HasValue)
-            {
-                double startD = start.GetValueOrDefault().ToOADate();
-                entries = entries.Where(s => Convert.ToDouble(s.TranslationTime) > startD);
-            }
-            switch (translator)
-            {
-                case "leetspeak":
-                    entries = entries.Where(s=> s.Translator==translator);
+                case "name_desc":
+                    entries = entries.OrderByDescending(s => s.InputString);
                     break;
-                case "yoda":
-                    entries = entries.Where(s => s.Translator == translator);
+                case "Date":
+                    entries = entries.OrderBy(s => s.TranslationTime);
                     break;
-                case "ermahgerd":
-                    entries = entries.Where(s => s.Translator == translator);
-                    break;
-                case "irish":
-                    entries = entries.Where(s => s.Translator == translator);
+                case "date_desc":
+                    entries = entries.OrderByDescending(s => s.TranslationTime);
                     break;
                 default:
+                    entries = entries.OrderBy(s => s.InputString);
                     break;
             }
 
@@ -80,30 +81,37 @@ namespace AFSFTCase.Controllers
             {
                 entries = entries.Where(s => s.InputString.Contains(searchString));
             }
-            switch (sortOrder) // using switch case is much more faster than if statements
+            /*
+            switch (sortOrder)// using switch case is much more faster than if statements
             {
-                case "input_desc":
-                    entries = entries.OrderByDescending(x => x.InputString);
+                case "":
+                    switch (sortOrder)
+                    {
+                        case "input_desc":
+                            entries = entries.OrderByDescending(x => x.InputString);
+                            break;
+                        
+                        case "trans_desc":
+                            entries = entries.OrderByDescending(x => x.Translator);
+                            break;
+                        case "trans_asc":
+                            entries = entries.OrderBy(x => x.Translator);
+                            break;
+                        case "input_asc":
+                            entries = entries.OrderBy(x => x.InputString);
+                            break;
+                    }
                     break;
+
+                default:
                 case "":
                     entries = entries.OrderBy(x => x.TranslationTime);
                     break;
                 case "date_desc":
-                    
-                    break;
-                case "trans_desc":
-                    entries = entries.OrderByDescending(x => x.Translator);
-                    break;
-                case "trans_asc":
-                    entries = entries.OrderBy(x => x.Translator);
-                    break;
-                case "input_asc":
-                    entries = entries.OrderBy(x => x.InputString);
-                    break;
-                default:
                     entries = entries.OrderByDescending(x => x.TranslationTime);
                     break;
-            }
+            }*/
+            
             return View("TranslationHistory", await entries.AsNoTracking().ToListAsync());
         }
 
